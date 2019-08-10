@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>LPM_EDC</title>
+    <style>
+        * {
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        table,
+        td {
+            border: 1px solid #3e3e3e;
+        }
+
+        table {
+            margin: 1em auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 1em;
+        }
+
+        td:first-child {
+            background: #3cb371;
+        }
+
+        input {
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        #description {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>LPM</td>
+            <td><input type="date" id="LPM"></td>
+        </tr>
+        <tr>
+            <td>孕周</td>
+            <td id="weeks"></td>
+        </tr>
+        <tr>
+            <td>EDC</td>
+            <td id="EDC"></td>
+        </tr>
+        <tr>
+            <td>描述</td>
+            <td id="description"></td>
+        </tr>
+    </table>
+    <script>
+        const fullms = 8.64e7 * 280;
+
+        function $(selector) {
+            return document.querySelector(selector);
+        }
+
+        function format(string) {
+            var date = new Date(string);
+            var full = function(num) {
+                if (num < 10) {
+                    num = "0" + num;
+                }
+                return num;
+            };
+            return date.getFullYear() + "-" + full(date.getMonth() + 1) + "-" + full(date.getDate());
+        }
+
+        function LPM_EDC() {
+            var LPM = format($("#LPM").value);
+            var EDC = format(new Date(LPM).getTime() + fullms);
+            var days = (Date.now() - new Date(LPM).getTime()) / 8.64e7;
+            var weeks = parseInt(days / 7) + "周" + (days % 7).toFixed(0) + "天";
+            $("#weeks").innerHTML = weeks;
+            $("#EDC").innerHTML = EDC;
+            $("#description").innerHTML = "末次月经：" + LPM + "，预产期：" + EDC + "，现孕" + weeks;
+        }
+
+        $("#LPM").value = format(Date.now() - fullms);
+        $("#LPM").addEventListener("change", LPM_EDC);
+        document.addEventListener("DOMContentLoaded", LPM_EDC);
+    </script>
+    <!-- saowang@outlook.com -->
+</body>
+
+</html>
